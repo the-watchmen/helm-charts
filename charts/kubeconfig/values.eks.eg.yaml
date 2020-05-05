@@ -1,0 +1,3 @@
+server: https://blah.gr7.us-east-1.eks.amazonaws.com
+cert: blah
+cluster: my-cluster

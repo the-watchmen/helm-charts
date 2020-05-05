@@ -1,0 +1,10 @@
+data:
+  logging-properties: |
+    handlers = java.util.logging.ConsoleHandler
+    .level = INFO
+    java.util.logging.ConsoleHandler.level = INFO
+    hudson.security.level = ALL
+    jenkins.security.plugins.ldap.level = ALL
+    org.acegisecurity.providers.ldap = ALL
+    org.acegisecurity.ldap = ALL
+    com.sun.jndi.ldap = ALL

@@ -1,0 +1,61 @@
+#
+# port: 3000
+# namespace: ns-123
+# name: name-123
+#
+replicas: 1
+
+image: {}
+  # pullPolicy: IfNotPresent
+  # name: my-registry.com/my-user/my-image:my-tag
+  # pullSecret: registry
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 2048Mi
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: internal
+
+service:
+  enabled: true
+#
+# metadataAnnotations:
+#   my-tag/my-annotation: my-value
+#
+# specTemplateMetadataAnnotations:
+#   my-tag/my-annotation: my-value
+#
+readinessProbe:
+  httpGet:
+    path: /
+  initialDelaySeconds: 60
+  periodSeconds: 30
+#
+# defaults to httpGet as above, but can use tcpSocket as below
+#
+# readinessProbe:
+#   isTcp: true
+#
+# can do similar with livenessProbe...
+#
+livenessProbe:
+  httpGet:
+    path: /
+  initialDelaySeconds: 60
+  periodSeconds: 30
+#
+# env:
+#   DEBUG: app:*,lib:*,dbg:*
+#   INSTANCE_IP:
+#     valueFrom:
+#       fieldRef:
+#         fieldPath: status.podIP
+#
+# can use string or map type values as above...
