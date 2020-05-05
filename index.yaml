@@ -1,0 +1,58 @@
+apiVersion: v1
+entries:
+  config-map:
+  - apiVersion: v1
+    created: "2020-05-05T04:22:20.315914524Z"
+    digest: 59edf67466157d64e5c651ef37eef01c322bb29d2b3d2d203be2c31e232540d2
+    name: config-map
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/config-map-1.0.0/config-map-1.0.0.tgz
+    version: 1.0.0
+  kubeconfig:
+  - apiVersion: v1
+    created: "2020-05-05T04:22:20.416622308Z"
+    digest: 18d255e6158d41d729c1dc2a7e359b6eab7f1169040fe9a74618c8cb11cf0a00
+    name: kubeconfig
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/kubeconfig-1.0.0/kubeconfig-1.0.0.tgz
+    version: 1.0.0
+  micro-service:
+  - apiVersion: v1
+    created: "2020-05-05T04:22:20.514247672Z"
+    digest: f502069d631cf08b0d6e058672858f582c0d130fddcb4e0d39daaab995966aeb
+    name: micro-service
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/micro-service-1.0.0/micro-service-1.0.0.tgz
+    version: 1.0.0
+  pvc:
+  - apiVersion: v1
+    created: "2020-05-05T04:22:20.601928894Z"
+    digest: fb4291785e3ad899dece8d09a0ea6ea7db1dd9fd1d415cb9b9270dd64b246dda
+    name: pvc
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/pvc-1.0.0/pvc-1.0.0.tgz
+    version: 1.0.0
+  tls:
+  - apiVersion: v1
+    created: "2020-05-05T04:22:20.698890876Z"
+    digest: 615ba92217dc6fe870c18b8278b233c9cd6b080ac27a35764579bae289d9bd13
+    name: tls
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/tls-1.0.0/tls-1.0.0.tgz
+    version: 1.0.0
+  vault:
+  - apiVersion: v2
+    created: "2020-05-05T04:22:20.791848561Z"
+    description: Install and configure Vault on Kubernetes.
+    digest: f7e552416675dc4c0c90d019c2e54349e44c3549ef62d42db57bd44afd1b4056
+    home: https://www.vaultproject.io
+    icon: https://github.com/hashicorp/vault/raw/f22d202cde2018f9455dec755118a9b84586e082/Vault_PrimaryLogo_Black.png
+    name: vault
+    sources:
+    - https://github.com/hashicorp/vault
+    - https://github.com/hashicorp/vault-helm
+    - https://github.com/hashicorp/vault-k8s
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/vault-0.5.0/vault-0.5.0.tgz
+    version: 0.5.0
+generated: "2020-05-05T04:22:20.226926036Z"
