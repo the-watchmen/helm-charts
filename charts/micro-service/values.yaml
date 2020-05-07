@@ -4,6 +4,7 @@
 # name: name-123
 #
 replicas: 1
+revisionHistoryLimit: 1
 
 image: {}
   # pullPolicy: IfNotPresent
