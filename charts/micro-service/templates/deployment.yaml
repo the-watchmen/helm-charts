@@ -16,7 +16,7 @@ spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app: {{ template "name" }}
+      app: {{ template "name" . }}
   template:
     metadata:
       labels:
