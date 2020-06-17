@@ -10,6 +10,13 @@ entries:
     version: 1.0.0
   job:
   - apiVersion: v1
+    created: "2020-06-17T00:43:34.640012741Z"
+    digest: 63d60b06fd1a69575fc8657978708882e63c9eadf427166852ed96e4ebb038ff
+    name: job
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/job-1.1.0/job-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v1
     created: "2020-06-17T00:19:07.5521061Z"
     digest: 9a22c175707b0312e54ffb5df88942ef40b10ad77ead9fd7bce05b4fee3039b9
     name: job
