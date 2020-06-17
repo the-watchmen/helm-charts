@@ -1,0 +1,11 @@
+metadataAnnotations:
+  my-tag/my-metadata-annotation: my-value
+specTemplateMetadataAnnotations:
+  my-tag/my-spec-template-annotation: my-value
+image:
+  name: my-image:my-tag
+env:
+  DEBUG: app:*,lib:*,dbg:*
+volumes:
+  existingPvc1: '/path/to/pvc1'
+  existingPvc2: '/path/to/pvc2'

@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.name }}
+  annotations:
+    {{- range $key, $value := .Values.metadataAnnotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  backoffLimit: {{ .Values.backoffLimit }}
+  parallelism: {{ .Values.parallelism }}
+  template:
+    metadata:
+      name: {{ .Values.name }}
+      annotations:
+        {{- range $key, $value := .Values.specTemplateMetadataAnnotations }}
+          {{ $key }}: {{ $value | quote }}
+        {{- end }}
+    spec:
+      {{- if .Values.image.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image.name }}
+          env:
+          {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+            {{- if eq (kindOf $value) "map" }}
+              {{- $value | toYaml | trim | nindent 12 }}
+            {{- else }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+          {{- range $key, $value := .Values.volumes }}
+          {{- $volName := printf "%s-name" $key }}
+            - mountPath: {{ $value | quote }}
+              name: {{ $volName }}
+          {{- end }}
+      volumes:
+      {{- range $key, $value := .Values.volumes }}
+      {{- $volName := printf "%s-name" $key }}
+        - name: {{ $volName }}
+          persistentVolumeClaim:
+            claimName: {{ $key }}
+      {{- end }}
+      restartPolicy: {{ .Values.restartPolicy }}

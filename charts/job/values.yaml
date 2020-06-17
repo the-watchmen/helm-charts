@@ -1,0 +1,38 @@
+#
+# namespace will default, but can override
+#
+# namespace: my-namespace
+#
+# metadataAnnotations:
+#   my-tag/my-metadata-annotation: my-value
+#
+# specTemplateMetadataAnnotations:
+#   my-tag/my-spec-template-annotation: my-value
+#
+# name will default based on _helpers.tpl, but can override
+#
+# name: my-name
+#
+# image name required!
+#
+# image:
+#   name: my-image:my-tag
+#
+backoffLimit: 1
+restartPolicy: Never
+# parallelism: 1
+#
+# env:
+#   DEBUG: app:*,lib:*,dbg:*
+#   INSTANCE_IP:
+#     valueFrom:
+#       fieldRef:
+#         fieldPath: status.podIP
+#
+# can use string or map type values as above...
+
+# existing volumes
+#
+#volumes:
+#  existingPvc1: '/path/to/pvc1'
+#  existingPvc2: '/path/to/pvc2'
