@@ -8,6 +8,14 @@ entries:
     urls:
     - https://github.com/the-watchmen/helm-charts/releases/download/config-map-1.0.0/config-map-1.0.0.tgz
     version: 1.0.0
+  job:
+  - apiVersion: v1
+    created: "2020-06-17T00:19:07.5521061Z"
+    digest: 9a22c175707b0312e54ffb5df88942ef40b10ad77ead9fd7bce05b4fee3039b9
+    name: job
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/job-1.0.0/job-1.0.0.tgz
+    version: 1.0.0
   kubeconfig:
   - apiVersion: v1
     created: "2020-05-05T04:22:20.416622308Z"
