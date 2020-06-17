@@ -29,22 +29,17 @@ spec:
           {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
             {{- if eq (kindOf $value) "map" }}
-              {{- $value | toYaml | trim | nindent 12 }}
+              {{- $value | toYaml | trim | nindent 14 }}
             {{- else }}
               value: {{ $value | quote }}
             {{- end }}
           {{- end }}
+          {{- if .Values.volumeMounts }}
           volumeMounts:
-          {{- range $key, $value := .Values.volumes }}
-          {{- $volName := printf "%s-name" $key }}
-            - mountPath: {{ $value | quote }}
-              name: {{ $volName }}
-          {{- end }}
+            {{- .Values.volumeMounts | toYaml | trim | nindent 12 }}
+          {{- end}}
+      {{- if .Values.volumes }}
       volumes:
-      {{- range $key, $value := .Values.volumes }}
-      {{- $volName := printf "%s-name" $key }}
-        - name: {{ $volName }}
-          persistentVolumeClaim:
-            claimName: {{ $key }}
+        {{- .Values.volumes | toYaml | trim | nindent 8 }}
       {{- end }}
       restartPolicy: {{ .Values.restartPolicy }}
