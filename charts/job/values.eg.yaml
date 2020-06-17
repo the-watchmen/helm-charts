@@ -7,5 +7,10 @@ image:
 env:
   DEBUG: app:*,lib:*,dbg:*
 volumes:
-  existingPvc1: '/path/to/pvc1'
-  existingPvc2: '/path/to/pvc2'
+  - name: rds-jks
+    configMap:
+      name: rds
+volumeMounts:
+  - name: rds-jks
+    mountPath: /app/rds/jks
+    subPath: rds
