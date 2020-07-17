@@ -1,0 +1,15 @@
+name: api-router
+host: api-router.dev.acme.com
+alias:
+annotations:
+  nginx.ingress.kubernetes.io/use-regex: "true"
+  nginx.ingress.kubernetes.io/rewrite-target: /$1
+paths:
+  - path: /something/(.*)
+    backend:
+      serviceName: something
+      servicePort: 8000
+  - path: /(.*)
+    backend:
+      serviceName: fallback
+      servicePort: 8000
