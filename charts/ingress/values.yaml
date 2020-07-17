@@ -1,0 +1,4 @@
+# host: my-host.com
+annotations:
+  kubernetes.io/ingress.class: internal
+  prometheus.io/probe: "true"
