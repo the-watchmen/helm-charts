@@ -8,6 +8,14 @@ entries:
     urls:
     - https://github.com/the-watchmen/helm-charts/releases/download/config-map-1.0.0/config-map-1.0.0.tgz
     version: 1.0.0
+  ingress:
+  - apiVersion: v1
+    created: "2020-07-17T18:06:18.099492503Z"
+    digest: 40b1f1af8ffbadbe995a084a569bae0eb3eb35ff9a4307e5973b4c15fb49bae7
+    name: ingress
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/ingress-1.0.0/ingress-1.0.0.tgz
+    version: 1.0.0
   job:
   - apiVersion: v1
     created: "2020-06-17T00:43:34.640012741Z"
@@ -82,6 +90,14 @@ entries:
     urls:
     - https://github.com/the-watchmen/helm-charts/releases/download/pvc-1.0.0/pvc-1.0.0.tgz
     version: 1.0.0
+  secret:
+  - apiVersion: v1
+    created: "2020-07-17T18:06:18.691891971Z"
+    digest: 4f59c974c91059648dff458150d9dedd9c01c71da47cdfdf82f50068805989b8
+    name: secret
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/secret-1.0.1/secret-1.0.1.tgz
+    version: 1.0.1
   tls:
   - apiVersion: v1
     created: "2020-05-05T04:22:20.698890876Z"
