@@ -1,0 +1,161 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: twistlock-defender-ds
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: twistlock-defender
+  template:
+    metadata:
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/twistlock-defender: unconfined
+      labels:
+        app: twistlock-defender
+    spec:
+      serviceAccountName: twistlock-service
+{{- if .Values.secrets_name }}
+      imagePullSecrets:
+      - name: {{ .Values.secrets_name }}
+{{- end}}
+      restartPolicy: Always
+{{- if .Values.node_selector }}
+      nodeSelector:
+        {{ .Values.node_selector }}
+{{- end}}
+      containers:
+      - name: twistlock-defender
+        image: {{ .Values.image_name }}
+        volumeMounts:
+        - name: data-folder
+          mountPath: "/var/lib/twistlock"
+        - name: certificates # Setting the certificates mount after data-folder since it is nested and was overridden in CRI based GKE cluster
+          mountPath: "/var/lib/twistlock/certificates"
+        - name: docker-sock-folder
+          mountPath: "{{ .Values.docker_socket_folder }}"
+        - name: passwd
+          mountPath: "/etc/passwd"
+          readOnly: true
+        - name: docker-netns
+          mountPath: "/var/run/docker/netns"
+          readOnly: true
+        - name: syslog-socket
+          mountPath: "/dev/log"
+        - name: auditd-log
+          mountPath: "/var/log/audit"
+{{- if eq .Values.defender_type "cri" }}
+        - name: defender-data # In the cri-o container runtime, the Dockerfile volumes are not mounted by default and this is required to make "/prisma-static-data" writeable
+          mountPath: "/prisma-static-data"
+{{- end}}
+{{- if .Values.iptables_flock_folder }}
+        - name: iptables-lock
+          mountPath: "{{ .Values.iptables_flock_folder }}"
+{{- end}}
+        env:
+        - name: WS_ADDRESS
+          value: {{ .Values.ws_address }}
+        - name: DEFENDER_TYPE
+          value: {{ .Values.defender_type }}
+        - name: DEFENDER_LISTENER_TYPE
+          value: "none"
+        - name: LOG_PROD
+          value: "true"
+        - name: SYSTEMD_ENABLED
+          value: "false"
+        - name: DOCKER_CLIENT_ADDRESS
+          value: "{{ .Values.DOCKER_SOCKET }}"
+        - name: DEFENDER_CLUSTER_ID
+          value: "{{ .Values.cluster_id }}"
+        - name: DEFENDER_CLUSTER
+          value: "{{ .Values.cluster }}"
+        - name: MONITOR_SERVICE_ACCOUNTS
+          value: "{{ .Values.monitor_service_accounts }}"
+        - name: MONITOR_ISTIO
+          value: "{{ .Values.monitor_istio }}"
+        - name: COLLECT_POD_LABELS
+          value: "{{ .Values.collect_pod_labels }}"
+        - name: INSTALL_BUNDLE
+          value: "{{ .Values.install_bundle }}"
+        - name: HOST_CUSTOM_COMPLIANCE_ENABLED
+          value: "{{ .Values.host_custom_compliance }}"
+{{- if .Values.containerized_host }}
+        - name: CONTAINERIZED_HOST
+          value: "true"
+{{- end}}
+{{- if .Values.microsegmentation }}
+        - name: ENFORCERD_KUBENODE
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: K8S_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: K8S_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+{{- end}}
+        securityContext:
+          readOnlyRootFilesystem: true
+          privileged: {{ .Values.privileged }}
+{{- if .Values.selinux_header }}
+          {{ .Values.selinux_header }}
+            {{ .Values.selinux_options }}
+{{- end }}
+          capabilities:
+            add:
+            - NET_ADMIN  # NET_ADMIN - Required for process monitoring
+            - SYS_ADMIN  # SYS_ADMIN - Required for filesystem monitoring
+            - SYS_PTRACE # SYS_PTRACE - Required for local audit monitoring
+            - MKNOD # A capability to create special files using mknod(2), used by docker-less registry scanning
+            - SETFCAP # A capability to set file capabilities, used by docker-less registry scanning
+{{- if .Values.microsegmentation }}
+            - NET_RAW # Required for using raw sockets by UDP datapath and in diagnostic ping implementations
+            - SYS_RESOURCE # Required for setting resource limits (setrlimit syscall)
+            - SYS_MODULE # Required for loading kernel modules
+            - IPC_LOCK # Required for defender to use perf events on systems with insufficient mlock limit, since microsegmentation agent consumes it too. (See https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html#unprivileged-users)
+{{- end }}
+        resources: # See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled
+          limits:
+            memory: {{ .Values.limit_memory }}
+          requests:
+            cpu: "256m"
+      volumes:
+      - name: certificates
+        secret:
+          secretName: twistlock-secrets
+          defaultMode: 256
+      - name: syslog-socket
+        hostPath:
+          path: "/dev/log"
+      - name: data-folder
+        hostPath:
+          path: "{{ .Values.DATA_FOLDER }}"
+      - name: docker-netns
+        hostPath:
+          path: "/var/run/docker/netns"
+      - name: passwd
+        hostPath:
+          path: "/etc/passwd"
+      - name: docker-sock-folder
+        hostPath:
+          path: "{{ .Values.docker_socket_folder }}"
+      - name: auditd-log
+        hostPath:
+          path: "/var/log/audit"
+{{- if eq .Values.defender_type "cri" }}
+      - name: defender-data
+{{- end}}
+{{- if .Values.iptables_flock_folder}}
+      - name: iptables-lock
+        hostPath:
+          path: "{{ .Values.iptables_flock_folder }}"
+{{- end}}
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+{{- if .Values.microsegmentation }}
+      terminationGracePeriodSeconds: 90 # Allow the enforcer and defender to complete their cleanup
+{{- end}}

@@ -1,0 +1,49 @@
+COMMUNICATION_PORT: "443"
+# CONSOLE_CN: us-west1.cloud.twistlock.com
+DATA_FOLDER: /var/lib/twistlock
+DATA_RECOVERY_ENABLED: "true"
+DATA_RECOVERY_VOLUME: /var/lib/twistlock-backup
+DEFENDER_CN: ""
+DEFENDER_LISTENER_TYPE: NONE
+DISABLE_CONSOLE_CGROUP_LIMITS: "false"
+DOCKER_SOCKET: /var/run/docker.sock
+DOCKER_TWISTLOCK_TAG: _20_09_366
+MANAGEMENT_PORT_HTTP: ""
+MANAGEMENT_PORT_HTTPS: "8083"
+READ_ONLY_FS: "true"
+RUN_CONSOLE_AS_ROOT: "false"
+SCAP_ENABLED: "false"
+SELINUX_LABEL: disable
+SYSTEMD_ENABLED: "false"
+access_ca: ""
+# admission_cert: s3cret
+# admission_key: s3cret
+# ca_cert: s3cret
+# client_cert: s3cret
+# client_key: s3cret
+cluster: ""
+# cluster_id: blah-blah-blah-blah
+cluster_role_name: twistlock-view
+collect_pod_labels: false
+configmap_role_name: twistlock-configmap-updater
+containerized_host: false
+defender_service_port: 9998
+defender_type: daemonset
+docker_socket_folder: /var/run
+host_custom_compliance: false
+# image_name: registry-auth.twistlock.com/tw_s3cret/twistlock/defender:defender_20_09_366
+# install_bundle: s3cret
+iptables_flock_folder: /run
+limit_memory: '"512Mi"'
+microsegmentation: false
+monitor_istio: false
+monitor_service_accounts: true
+namespace: twistlock
+node_selector: ""
+openshift: false
+privileged: "false"
+secrets_name: ""
+selinux_header: ""
+selinux_options: ""
+# service_parameter: s3cret
+# ws_address: wss://us-west1.cloud.twistlock.com:443

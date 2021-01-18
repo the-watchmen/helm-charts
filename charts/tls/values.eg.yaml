@@ -1,0 +1,15 @@
+crt: |
+  -----BEGIN CERTIFICATE-----
+  public-stuff
+  -----END CERTIFICATE-----
+  -----BEGIN CERTIFICATE-----
+  more-public-stuff
+  -----END CERTIFICATE-----
+  -----BEGIN CERTIFICATE-----
+  yet-more-public-stuff
+  -----END CERTIFICATE-----
+
+key: |
+  -----BEGIN RSA PRIVATE KEY-----
+  private-stuff
+  -----END RSA PRIVATE KEY-----

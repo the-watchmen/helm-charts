@@ -1,0 +1,12 @@
+{{- if .Values.microsegmentation }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.configmap_role_name }}
+rules:
+- apiGroups: [""] # Core API
+  resources: ["configmaps"]
+  verbs: ["get", "watch", create", "patch", "update"]
+  resourceNames: ["aporeto-state"]
+{{- end}}

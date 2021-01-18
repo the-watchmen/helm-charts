@@ -1,0 +1,24 @@
+{{- if .Values.service.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ template "namespace" . }}
+  name: {{ template "name" . }}
+  annotations:
+    {{- range $key, $value := .Values.service.metadata.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ports:
+    - name: main
+      port: {{ .Values.port }}
+      targetPort: {{ template "containerPort" . }}
+    {{- if .Values.portAdd }}
+    - name: add
+      port: {{ .Values.portAdd }}
+      targetPort: {{ template "containerPortAdd" . }}
+    {{- end }}
+  selector:
+    app: {{ template "name" . }}
+  type: {{ .Values.service.spec.type }}
+{{- end -}}

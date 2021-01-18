@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: {{ template "namespace" . }}
+  name: {{ template "name" . }}
+  annotations:
+    {{- range $key, $value := .Values.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+          {{- if .Values.paths }}
+            {{- .Values.paths | toYaml | trim | nindent 8 }}
+          {{- else }}
+          - path: /
+            backend:
+              serviceName: {{ template "name" . }}
+              servicePort: {{ .Values.port }}
+          {{- end}}
+    {{- if .Values.alias }}
+    - host: {{ .Values.alias }}
+      http:
+        paths:
+          {{- if .Values.paths }}
+            {{- .Values.paths | toYaml | trim | nindent 8 }}
+          {{- else }}
+          - path: /
+            backend:
+              serviceName: {{ template "name" . }}
+              servicePort: {{ .Values.port }}
+          {{- end}}
+    {{- end }}
+  tls:
+    - hosts:
+      - {{ .Values.host }}
+      {{- if .Values.alias }}
+      - {{ .Values.alias}}
+      {{- end }}
+      {{- if .Values.tlsSecret }}
+      secretName: {{ .Values.tlsSecret }}
+      {{- end -}}

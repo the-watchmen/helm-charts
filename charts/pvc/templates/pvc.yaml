@@ -1,0 +1,22 @@
+{{- $name := default .Release.Name .Values.name -}}
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+{{- if .Values.annotations }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+{{- end }}
+  name: {{ $name }}
+  namespace: {{ default .Release.Namespace .Values.namespace }}
+  labels:
+    "app.kubernetes.io/name": {{ $name | quote }}
+    "helm.sh/chart": "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    "app.kubernetes.io/managed-by": {{ .Release.Service | quote }}
+spec:
+  accessModes:
+    - {{ .Values.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.size }}
+  storageClassName: {{ required "storageClass required" .Values.storageClass }}

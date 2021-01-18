@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.name }}
+  annotations:
+    {{- range $key, $value := .Values.metadataAnnotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  backoffLimit: {{ .Values.backoffLimit }}
+  parallelism: {{ .Values.parallelism }}
+  template:
+    metadata:
+      name: {{ .Values.name }}
+      annotations:
+        {{- range $key, $value := .Values.specTemplateMetadataAnnotations }}
+          {{ $key }}: {{ $value | quote }}
+        {{- end }}
+    spec:
+      {{- if .Values.image.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image.name }}
+          env:
+          {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+            {{- if eq (kindOf $value) "map" }}
+              {{- $value | toYaml | trim | nindent 14 }}
+            {{- else }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.volumeMounts }}
+          volumeMounts:
+            {{- .Values.volumeMounts | toYaml | trim | nindent 12 }}
+          {{- end}}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- .Values.volumes | toYaml | trim | nindent 8 }}
+      {{- end }}
+      restartPolicy: {{ .Values.restartPolicy }}

@@ -1,0 +1,8 @@
+image:
+  name: sonatype/nexus3:3.21.1
+port: 8081
+portAdd: 8082
+ingress:
+  enabled: true
+  host: nexus.watchmen.com
+  add: registry.watchmen.com
