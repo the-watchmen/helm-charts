@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: scale
+rules:
+    verbs:
+      - get
+      - list
+    apiGroups:
+      - apps
+      - extensions
+    resources:
+      - deployments
+    verbs:
+      - patch
+    apiGroups:
+      - apps
+      - extensions
+    resources:
+      - deployments/scale
