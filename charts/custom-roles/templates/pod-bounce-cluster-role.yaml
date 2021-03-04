@@ -3,8 +3,7 @@ kind: ClusterRole
 metadata:
   name: pod-bounce
 rules:
-  - apiGroups:
-      - ""
+  - apiGroups: [""]
     resources:
       - pods
     verbs:

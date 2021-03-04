@@ -3,18 +3,14 @@ kind: ClusterRole
 metadata:
   name: scale
 rules:
+  - apiGroups: ["extensions", "apps"]
     verbs:
       - get
       - list
-    apiGroups:
-      - apps
-      - extensions
     resources:
       - deployments
+  - apiGroups: ["extensions", "apps"]
     verbs:
       - patch
-    apiGroups:
-      - apps
-      - extensions
     resources:
       - deployments/scale
