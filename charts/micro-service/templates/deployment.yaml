@@ -82,7 +82,7 @@ spec:
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           {{- end }}
-          {{- end }} # if Values.port
+          {{- end }} {{- /* if Values.port */}}
           {{- if .Values.env }}
           env:
             {{- range $key, $value := .Values.env }}
