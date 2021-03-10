@@ -11,6 +11,14 @@ rules:
       - deployments
   - apiGroups: ["extensions", "apps"]
     verbs:
+      - get
       - patch
+      - update
     resources:
       - deployments/scale
+  - apiGroups: ["extensions", "apps"]
+    verbs:
+      - get
+      - list
+    resources:
+      - replicasets
