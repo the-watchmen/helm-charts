@@ -13,3 +13,7 @@
 {{- define "containerPortAdd" -}}
 {{- default .Values.portAdd .Values.containerPortAdd -}}
 {{- end -}}
+
+{{- define "deploymentApiVersion" -}}
+{{- default .Values.deploymentApiVersion -}}
+{{- end -}}
