@@ -5,6 +5,7 @@
 #
 replicas: 1
 revisionHistoryLimit: 1
+deploymentApiVersion: apps/v1
 
 image: {}
   # pullPolicy: IfNotPresent
