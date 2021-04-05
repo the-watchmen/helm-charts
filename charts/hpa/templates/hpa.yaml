@@ -1,0 +1,29 @@
+apiVersion: {{ .Values.apiVersion }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  maxReplicas: {{ .Values.maxReplicas }}
+  minReplicas: {{ .Values.minReplicas }}
+  scaleTargetRef:
+    apiVersion: {{ .Values.spec.apiVersion }}
+    kind: {{ .Values.hpaTargetResource }}
+    name: {{ .Values.hpaTargetResourceName }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.scaleDown.stabilizationWindowSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.scaleUp.stabilizationWindowSeconds }}    
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.cpu.averageUtilization }}
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.memory.averageUtilization }}
