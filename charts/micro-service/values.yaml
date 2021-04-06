@@ -67,3 +67,16 @@ livenessProbe:
 pdb:
   enabled: true
   maxUnavailable: 50%
+
+hpa:
+  enabled: false
+  maxReplicas: 2
+  minReplicas: 1
+  scaleDown:
+    stabilizationWindowSeconds: 300
+  scaleUp:
+    stabilizationWindowSeconds: 15
+  cpu:
+    averageUtilization: 200
+  memory:
+    averageUtilization: 200
