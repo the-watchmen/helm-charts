@@ -5,6 +5,7 @@
 #
 replicas: 1
 revisionHistoryLimit: 1
+deploymentApiVersion: apps/v1
 
 image: {}
   # pullPolicy: IfNotPresent
@@ -26,6 +27,8 @@ ingress:
 
 service:
   enabled: true
+  spec: {}
+  metadata: {}
 #
 # metadataAnnotations:
 #   my-tag/my-annotation: my-value
@@ -60,3 +63,20 @@ livenessProbe:
 #         fieldPath: status.podIP
 #
 # can use string or map type values as above...
+
+pdb:
+  enabled: true
+  maxUnavailable: 50%
+
+hpa:
+  enabled: false
+  maxReplicas: 2
+  minReplicas: 1
+  scaleDown:
+    stabilizationWindowSeconds: 300
+  scaleUp:
+    stabilizationWindowSeconds: 15
+  cpu:
+    averageUtilization: 200
+  memory:
+    averageUtilization: 200

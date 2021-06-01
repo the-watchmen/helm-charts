@@ -1,0 +1,12 @@
+hpa:
+  enabled: true
+  maxReplicas: 4
+  minReplicas: 2
+  scaleDown:
+    stabilizationWindowSeconds: 350
+  scaleUp:
+    stabilizationWindowSeconds: 15
+  cpu:
+    averageUtilization: 200
+  memory:
+    averageUtilization: 200
