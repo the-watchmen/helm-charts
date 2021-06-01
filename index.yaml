@@ -41,6 +41,13 @@ entries:
     version: 1.0.0
   micro-service:
   - apiVersion: v1
+    created: "2021-06-01T21:26:26.624550687Z"
+    digest: fa5ff4cb8d5de259434366dea365ceb4320b6de20ad8f76b659fa214308ec479
+    name: micro-service
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/micro-service-1.3.0/micro-service-1.3.0.tgz
+    version: 1.3.0
+  - apiVersion: v1
     created: "2020-05-30T01:05:51.391737591Z"
     digest: ae1ea999b68f65faf86ee96d09c18283cc233f4ed17de15810ab9fbf5043f10c
     name: micro-service
