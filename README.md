@@ -7,5 +7,5 @@ custom helm charts
 ### test chart locally
 
 ```
-helm template --debug -n ae-system --values charts/micro-service/values.eg.yaml  micro-service-scratch charts/micro-service
+helm template --debug -n my-ns --values charts/micro-service/values.eg.yaml  micro-service-scratch charts/micro-service
 ```

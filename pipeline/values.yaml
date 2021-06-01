@@ -1,3 +1,0 @@
-type: helm-publish
-build:
-  path: charts
