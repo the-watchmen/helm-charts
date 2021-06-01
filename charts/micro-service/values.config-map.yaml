@@ -1,0 +1,62 @@
+image:
+  name: sameersbn/squid:3.5.27-2
+port: 443
+containerPort: 3128
+
+readinessProbe:
+  isTcp: true
+
+livenessProbe:
+  isTcp: true
+
+# ingress:
+  # enabled: true
+  # host: squid.watchmen.com
+service:
+  metadata:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+      service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+  spec:
+    type: LoadBalancer
+
+# creates config-map named after service (e.g. 'squid')
+#
+data:
+  squid.conf: |-
+    # debug_options 28,3
+    cache deny all
+    cache_dir null /tmp
+    # access_log none
+    cache_log /dev/null
+    cache_store_log none
+    logfile_rotate 0
+    acl frontend src 10.0.0.0/8
+    http_port 3128 require-proxy-header
+    proxy_protocol_access allow frontend
+    acl whitelist url_regex -i amazonaws example
+    # match to peering routes !!!
+    acl localnet src 10.0.0.0/8
+    acl SSL_ports port 443
+    acl Safe_ports port 443
+    acl CONNECT method CONNECT
+    http_access deny !whitelist
+    http_access deny !Safe_ports
+    http_access deny CONNECT !SSL_ports
+    http_access allow localhost manager
+    http_access deny manager
+    http_access allow localnet
+    http_access allow localhost
+    http_access deny all
+    coredump_dir /squid/var/cache/squid
+    refresh_pattern .               0       20%     4320
+
+volumeMounts:
+  - name: the-volume
+    mountPath: /etc/squid
+
+volumes:
+  - name: the-volume
+    configMap:
+      name: squid

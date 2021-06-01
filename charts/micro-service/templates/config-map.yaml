@@ -1,0 +1,9 @@
+{{- if .Values.data -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "name" . }}
+  namespace: {{ template "namespace" . }}
+data:
+  {{- .Values.data | toYaml | trim | nindent 2 }}
+{{- end -}}

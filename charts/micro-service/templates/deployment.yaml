@@ -1,8 +1,4 @@
-{{- if .Capabilities.APIVersions.Has "apps/v1" }}
-apiVersion: apps/v1
-{{- else }}
-apiVersion: apps/v1beta1
-{{- end }}
+apiVersion: {{ template "deploymentApiVersion" . }}
 kind: Deployment
 metadata:
   namespace: {{ template "namespace" . }}
@@ -34,6 +30,10 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
       {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{- .Values.nodeSelector | toYaml | trim | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ template "name" . }}
           image: {{ .Values.image.name }}
@@ -54,9 +54,9 @@ spec:
           {{- end }}
           {{- if .Values.port }}
           ports:
-            - containerPort: {{ .Values.port }}
+            - containerPort: {{ template "containerPort" . }}
             {{- if .Values.portAdd }}
-            - containerPort: {{ .Values.portAdd }}
+            - containerPort: {{ template "containerPortAdd" . }}
             {{- end }}
           {{- if .Values.readinessProbe }}
           readinessProbe:
@@ -66,7 +66,7 @@ spec:
             httpGet:
               path: {{ .Values.readinessProbe.httpGet.path }}
             {{- end }}
-              port: {{ .Values.port }}
+              port: {{ template "containerPort" . }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           {{- end }}
@@ -78,11 +78,11 @@ spec:
             httpGet:
               path: {{ .Values.livenessProbe.httpGet.path }}
             {{- end }}
-              port: {{ .Values.port }}
+              port: {{ template "containerPort" . }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           {{- end }}
-          {{- end }} # if Values.port
+          {{- end }} {{- /* if Values.port */}}
           {{- if .Values.env }}
           env:
             {{- range $key, $value := .Values.env }}
