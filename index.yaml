@@ -8,6 +8,14 @@ entries:
     urls:
     - https://github.com/the-watchmen/helm-charts/releases/download/config-map-1.0.0/config-map-1.0.0.tgz
     version: 1.0.0
+  custom-roles:
+  - apiVersion: v1
+    created: "2021-06-30T02:51:42.455785198Z"
+    digest: 7859aaa004a642abc940ceb91adb9ce644f70995fdb802cc4196bb57276ffbcc
+    name: custom-roles
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/custom-roles-1.0.0/custom-roles-1.0.0.tgz
+    version: 1.0.0
   ingress:
   - apiVersion: v1
     created: "2020-07-17T18:06:18.099492503Z"
