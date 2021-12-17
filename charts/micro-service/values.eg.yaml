@@ -8,3 +8,7 @@ ingress:
 nodeSelector:
   label-1: foo
   label-2: bar
+
+#tolerations:
+#  - key: "node-pool-blue"
+#    effect: "NoSchedule"
