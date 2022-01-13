@@ -24,6 +24,14 @@ entries:
     urls:
     - https://github.com/the-watchmen/helm-charts/releases/download/ingress-1.0.0/ingress-1.0.0.tgz
     version: 1.0.0
+  ip-masq-agent:
+  - apiVersion: v1
+    created: "2022-01-13T14:15:00.658078071Z"
+    digest: 1abba831a73a74364de506403324b17f15a2f604ab7da464dc1ff969ff46f4f1
+    name: ip-masq-agent
+    urls:
+    - https://github.com/the-watchmen/helm-charts/releases/download/ip-masq-agent-1.0.0/ip-masq-agent-1.0.0.tgz
+    version: 1.0.0
   job:
   - apiVersion: v1
     created: "2020-06-17T00:43:34.640012741Z"
