@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "name" . }}
+  namespace: {{ template "namespace" . }}
+data:
+  config: |
+    nonMasqueradeCIDRs:
+      {{- range .Values.nonMasqueradeCIDRs }}
+      - {{ . }}
+      {{- end }}
+    masqLinkLocal: {{ .Values.masqLinkLocal }}
+    masqLinkLocalIPv6: {{ .Values.masqLinkLocalIPv6 }}
+    resyncInterval: {{ .Values.resyncInterval }}

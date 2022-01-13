@@ -1,0 +1,6 @@
+image: gcr.io/google-containers/ip-masq-agent-amd64:v2.5.0
+nonMasqueradeCIDRs:
+  - 100.64.0.0/10
+masqLinkLocal: false
+masqLinkLocalIPv6: false
+resyncInterval: 5m
