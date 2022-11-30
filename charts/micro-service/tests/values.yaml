@@ -1,0 +1,41 @@
+port: 3030
+
+ready1:
+  httpGet:
+    path: /
+  initialDelaySeconds: 1
+  timeoutSeconds: 1
+  periodSeconds: 2
+  successThreshold: 1
+  failureThreshold: 6
+
+live1:
+  httpGet:
+    path: /
+  initialDelaySeconds: 3
+  periodSeconds: 4
+
+ready2:
+  command:
+    - foo
+    - bar
+    - baz
+  initialDelaySeconds: 5
+  periodSeconds: 6
+
+live2:
+  command:
+    - tik
+    - tok
+  initialDelaySeconds: 7
+  periodSeconds: 8
+
+ready3:
+  isTcp: true
+  initialDelaySeconds: 5
+  periodSeconds: 6
+
+live3:
+  isTcp: true
+  initialDelaySeconds: 7
+  periodSeconds: 8

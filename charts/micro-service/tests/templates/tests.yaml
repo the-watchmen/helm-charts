@@ -1,0 +1,17 @@
+one:
+  {{- include "probe" (dict "ctx" . "cfg" .Values.ready1 "type" "readiness") | trim | nindent 2 }}
+
+two:
+  {{- include "probe" (dict "ctx" . "cfg" .Values.live1 "type" "liveness") | trim | nindent 2 }}
+
+three:
+  {{- include "probe" (dict "ctx" . "cfg" .Values.ready2 "type" "readiness") | trim | nindent 2 }}
+
+four:
+  {{- include "probe" (dict "ctx" . "cfg" .Values.live2 "type" "liveness") | trim | nindent 2 }}
+
+five:
+  {{- include "probe" (dict "ctx" . "cfg" .Values.ready3 "type" "readiness") | trim | nindent 2 }}
+
+six:
+  {{- include "probe" (dict "ctx" . "cfg" .Values.live3 "type" "liveness") | trim | nindent 2 }}

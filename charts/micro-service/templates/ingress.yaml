@@ -1,12 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $hasV1Ingress := .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
-{{- if .Values.ingress.apiVersion }}
-apiVersion: {{ .Values.ingress.apiVersion }}
-{{- else if $hasV1Ingress }}
 apiVersion: networking.k8s.io/v1
-{{- else }}
-apiVersion: networking.k8s.io/v1beta1
-{{- end }}
 kind: Ingress
 metadata:
   namespace: {{ template "namespace" . }}
@@ -21,35 +14,23 @@ spec:
       http:
         paths:
           - path: /
-            {{- if $hasV1Ingress }}
             pathType: Prefix
             backend:
               service:
                 name: {{ template "name" . }}
                 port:
                   number: {{ .Values.port }}
-            {{- else }}
-            backend:
-              serviceName: {{ template "name" . }}
-              servicePort: {{ .Values.port }}
-            {{- end }}
     {{- if .Values.ingress.add }}
     - host: {{ .Values.ingress.add }}
       http:
         paths:
           - path: /
-            {{- if $hasV1Ingress }}
             pathType: Prefix
             backend:
               service:
                 name: {{ template "name" . }}
                 port:
                   number: {{ or .Values.portAdd .Values.port }}
-            {{- else }}
-            backend:
-              serviceName: {{ template "name" . }}
-              servicePort: {{ or .Values.portAdd .Values.port }}
-            {{- end }}
     {{- end }}
   tls:
     - hosts:

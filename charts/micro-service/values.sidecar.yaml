@@ -13,3 +13,12 @@ tolerations:
   - key: pool
     value: blue
     effect: NoExecute
+
+sideCar:
+  image:
+    name: side/side:1.0.0
+    # pullPolicy: Always
+  # livenessProbe:
+  #   isHttpGet: true
+  #   httpGet:
+  #     path: /
