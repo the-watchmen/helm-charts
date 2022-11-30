@@ -1,8 +1,10 @@
+{{- $name := include "name" . -}}
+
 apiVersion: {{ template "deploymentApiVersion" . }}
 kind: Deployment
 metadata:
   namespace: {{ template "namespace" . }}
-  name: {{ template "name" . }}
+  name: {{ $name }}
   annotations:
     {{- range $key, $value := .Values.metadataAnnotations }}
       {{ $key }}: {{ $value | quote }}
@@ -12,11 +14,11 @@ spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app: {{ template "name" . }}
+      app: {{ $name }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ $name }}
       annotations:
         {{- range $key, $value := .Values.specTemplateMetadataAnnotations }}
           {{ $key }}: {{ $value | quote }}
@@ -39,7 +41,7 @@ spec:
         {{- .Values.tolerations | toYaml | trim | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ template "name" . }}
+        - name: {{ $name }}
           image: {{ .Values.image.name }}
           {{- if .Values.volumeMounts }}
           volumeMounts:
@@ -62,31 +64,11 @@ spec:
             {{- if .Values.portAdd }}
             - containerPort: {{ template "containerPortAdd" . }}
             {{- end }}
-          {{- if .Values.readinessProbe }}
-          readinessProbe:
-            {{- if .Values.readinessProbe.isTcp }}
-            tcpSocket:
-            {{- else }}
-            httpGet:
-              path: {{ .Values.readinessProbe.httpGet.path }}
-            {{- end }}
-              port: {{ template "containerPort" . }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-          {{- end }}
-          {{- if .Values.livenessProbe }}
-          livenessProbe:
-            {{- if .Values.livenessProbe.isTcp }}
-            tcpSocket:
-            {{- else }}
-            httpGet:
-              path: {{ .Values.livenessProbe.httpGet.path }}
-            {{- end }}
-              port: {{ template "containerPort" . }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          {{- end }}
           {{- end }} {{- /* if Values.port */}}
+
+          {{- include "probe" (dict "ctx" . "cfg" .Values.readinessProbe "type" "readiness") | trim | nindent 10 }}
+          {{- include "probe" (dict "ctx" . "cfg" .Values.livenessProbe "type" "liveness") | trim | nindent 10 }}
+
           {{- if .Values.env }}
           env:
             {{- range $key, $value := .Values.env }}
@@ -98,6 +80,53 @@ spec:
               {{- end }}
             {{- end }}
           {{- end }}
+
+        {{- if .Values.sideCar }}
+        {{ with .Values.sideCar }}
+        - name: {{ $name }}-side-car
+          image: {{ .image.name }}
+          {{- if .volumeMounts }}
+          volumeMounts:
+            {{- .volumeMounts | toYaml | trim | nindent 12 }}
+          {{- end}}
+          {{- if .image.pullPolicy }}
+          imagePullPolicy: {{ .image.pullPolicy }}
+          {{- end }}
+          {{- if .command }}
+          command:
+            {{- range .command }}
+            - {{ . | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .resources }}
+          resources:
+            {{- .resources | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- if .port }}
+          ports:
+            - containerPort: {{ template "containerPort" . }}
+            {{- if .portAdd }}
+            - containerPort: {{ template "containerPortAdd" . }}
+            {{- end }}
+          {{- end }} {{- /* if .port */}}
+
+          {{- include "probe" (dict "ctx" . "cfg" .readinessProbe "type" "readiness") | trim | nindent 10 }}
+          {{- include "probe" (dict "ctx" . "cfg" .livenessProbe "type" "liveness") | trim | nindent 10 }}
+
+          {{- if .env }}
+          env:
+            {{- range $key, $value := .env }}
+              - name: {{ $key }}
+              {{- if eq (kindOf $value) "map" }}
+                {{- $value | toYaml | trim | nindent 16 }}
+              {{- else }}
+                value: {{ $value | quote }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- end }}
+
       {{- if .Values.volumes }}
       volumes:
         {{- .Values.volumes | toYaml | trim | nindent 8 }}
